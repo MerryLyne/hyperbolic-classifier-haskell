@@ -1,0 +1,22 @@
+# Base : Python 3.11 slim
+FROM python:3.11-slim
+
+# Installer build tools & git
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Mettre à jour pip et installer les packages nécessaires
+RUN pip install --upgrade pip
+RUN pip install numpy cython scipy smart_open pandas
+
+# Installer Gensim avec Poincaré
+RUN pip install git+https://github.com/piskvorky/gensim.git@develop
+
+# Créer le dossier de travail
+WORKDIR /app
+COPY . /app
+
+# Par défaut, lance Python interactif
+CMD ["python"]
